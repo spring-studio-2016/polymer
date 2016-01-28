@@ -1,26 +1,9 @@
 language: node_js
-sudo: false
-addons:
-  firefox: latest
-  apt:
-    sources:
-      - google-chrome
-      - ubuntu-toolchain-r-test
-    packages:
-      - google-chrome-stable
-      - g++-4.8
-node_js:
-  - '4.2'
-  - '5.1'
+node_js: "0.12"
 before_script:
-  - 'export DISPLAY=:99.0'
-  - sh -e /etc/init.d/xvfb start
-  - sleep 3
-  - npm i -g bower@1.7.1 gulp@3.9.0 firebase-tools@2.2.0
-  - bower i
+  - npm install -g gulp bower && npm install && bower install
 script:
-  - ./travis-runner.sh
+  - gulp && gulp deploy-gh-pages
 env:
   global:
-    - "CXX='g++-4.8'"
-    - secure: SbcQ7plU7aRGQlaAG2ffMhSvEs84073YSljOQ62DZAjRxgizMhF4xM7H2mPrmac9YRM4IBrQRvBKMMZy3L6OhN8gwpm8o+w2zV+5Q1fwpY9V8bilznnhp1JUY6jrB2l7aLTOFxt/cG+5ABxiupwWz/n+I7BaByYhBiHWntIBgDc528eecRNDYI5R36KWjLO/yr+SdElvyxDlDOdJGaluPvgMItbinFGcE1hYb/Jqrkkw8zpE6CTDmvMOq1aRBWSo9afgh2zDeKc02lTYP/4N0xcn8CqzHF7k5zGWHjN9DR8Ep8Bp1ff/sM7zHGZBqgVhn5WGv305jBQY6eOxiTp5cDP0WVIOjgJeM5rBu9hBQxhZSaMKBPr2B1NYUjIwTVQkBsnR4sr095Ugjg8JCZAmEevf/Ysl4CzQyW3gT+WcEluqjxUuicQWDclH6L/kOVPBJ+Eqdo/LY3G1tpLcc6fsvj4FlVO6LPTrbMyCagwQvnjX3uIdFyuthqtWWrHKQMGx2Ow9suNUi8Hyvk7WboS1Z6jrLIcs1rvXSX8rQmlMR5vJBK3Ejg6fS1OHxn/lrtLhj4lDLB9r/Fcu2PEHT1lcvQqsTa3W+t4Fk1qaShUlBDiwMbZWZgmlf1SdG5OzK1yrPLjTTdRFdqJGgb6TANCdetgczRWynvjIhr5IDMxvfJg=
+  - secure: J1Vw8gJmrJ0ch33Lbc8IHeVi7w5Wa/x5dZDHgGbAaJ5xSHM/T6h5/yy8rBw2ihXEZhzZAYTD20KJFM+GezCoG9jwaYo7OsQVnzOQC39kwCGj9H6iWQpP9R1zNjoL59LxGKRvx6jjRaTyAfRQR09r/16c+P+K74EntDCy+Kz7m0c6Mc3KZi94t/9e6kFF2ZSngYSnSCU0QU/xJDFO1kN5MuF5bGX4GxZXjQoURbaDbw6i9KsI37ToB+oaHPsP02E/kpEdOUPqZEzMpP1BBp+cgVq48kWGT53bLOSWJM1Xm/rZokTW3hw+iURNNWQMKyOov2R/wkKDZNOkf11QisgdJqOap4LB21pez8+t9LMFAzxsXIWg/VBUzJOC8vEv7BabFXq4zmIWFtJa6/VXUgIddx1AriQAbI9KLY9l37iT32TpeuO3e025hVw1km40xM6aj8X1pc5AGKwZuSifw1QEC9f3W+SgdYBRZADD6FO7Pe8IKeA/RdQxhwpoc85Iu6jTv2KIfCZnyc0a1le5f/20Blm5SCcgdiDRjFyBtEZWBKd2uLgkN08I3W4MGdWFW9LUcIbLPWGm+2+JNhDLA/jIZ7LSN6oI0FzO4J8XdUnaYWcPY3e6PKT8LzA357YRADA8lomsRPukqQv75UmrF3ewqJn9Je3FAZ3a7izERmYc2RE=
