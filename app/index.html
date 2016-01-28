@@ -63,7 +63,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   <span id="browser-sync-binding"></span>
   <template is="dom-bind" id="app">
 
-    App goes here.
+    <player-data players="{{players}}"></player-data>
+    <player-view players="[[players]]"></player-view>
+
+    <game-data game="{{game}}"></game-data>
+    <game-view players="[[players]]" game="[[game]]"></game-view>
 
     <paper-toast id="toast">
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>

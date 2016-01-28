@@ -1,0 +1,61 @@
+<!--
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
+-->
+
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<dom-module id="game-view">
+  <template>
+    Turn: {{game.turn}}
+    <br/>
+    Current player: {{currentPlayerName(game.turn)}}
+    <br/>
+    Current phase: {{currentPhaseName(game.phase)}}
+    <br/>
+    <paper-button raised on-tap="nextPhase">Next Phase</paper-button>
+  </template>
+  <script>
+  (function() {
+    'use strict';
+
+    Polymer({
+      is: 'game-view',
+
+      properties: {
+        players: {
+          type: Array
+        },
+        game: {
+          type: Object,
+          notify: true
+        }
+      },
+
+      currentPlayerName: function(turn) {
+        var playerIndex = turn % this.players.length;
+        return this.players[playerIndex].name;
+      },
+
+      currentPhaseName: function(phase) {
+        return this.game.phases[phase];
+      },
+
+      nextPhase: function() {
+        var nextPhase = this.game.phase + 1;
+        if (nextPhase === this.game.phases.length) {
+          nextPhase = 0;
+          this.set('game.turn', this.game.turn + 1);
+        }
+        this.set('game.phase', nextPhase);
+      }
+    });
+  })();
+  </script>
+</dom-module>
