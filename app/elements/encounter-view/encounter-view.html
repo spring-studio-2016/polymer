@@ -9,33 +9,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
 
-<dom-module id="player-data">
+<dom-module id="encounter-view">
   <template>
-
+    <paper-button raised on-tap="onTap">Tap me to have an enounter!</paper-button>
   </template>
   <script>
   (function() {
     'use strict';
 
     Polymer({
-      is: 'player-data',
+      is: 'encounter-view',
 
       properties: {
-        players: {
-          type: Array,
-          value: [
-            {
-              name: 'Abigail',
-              region: 0
-            },
-            {
-              name: 'Bruce',
-              region: 0
-            }
-          ],
+        game: {
+          type: Object,
           notify: true
         }
+      },
+
+      onTap: function() {
+        this.set('game.phase', this.game.phase + 1);
       }
     });
   })();

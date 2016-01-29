@@ -10,34 +10,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="player-data">
-  <template>
-
-  </template>
+<dom-module id="game-constants">
   <script>
-  (function() {
-    'use strict';
+    (function() {
+      'use strict';
 
-    Polymer({
-      is: 'player-data',
+      Polymer({
+        is: 'game-constants',
 
-      properties: {
-        players: {
-          type: Array,
-          value: [
-            {
-              name: 'Abigail',
-              region: 0
+        properties: {
+          phases: {
+            type: Object,
+            value: {
+              Movement: 0,
+              Encounter: 1
             },
-            {
-              name: 'Bruce',
-              region: 0
-            }
-          ],
-          notify: true
+            readonly: true
+          },
+          phaseNames: {
+            type: Array,
+            value: [
+              "Movement",
+              "Encounter"
+            ]
+          }
         }
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>

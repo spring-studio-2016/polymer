@@ -10,52 +10,59 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../game-constants/game-constants.html">
+<link rel="import" href="../map-view/map-view.html">
+<link rel="import" href="../encounter-view/encounter-view.html">
 
 <dom-module id="game-view">
   <template>
+    <game-constants id="constants"></game-constants>
+
     Turn: {{game.turn}}
+    <br/> Current player: {{currentPlayerName(game.currentPlayer)}}
+    <br/> Current phase: {{currentPhaseName(game.phase)}}
     <br/>
-    Current player: {{currentPlayerName(game.turn)}}
-    <br/>
-    Current phase: {{currentPhaseName(game.phase)}}
-    <br/>
-    <paper-button raised on-tap="nextPhase">Next Phase</paper-button>
+
+    <map-view hidden="{{!isMovementPhase(game.phase)}}" players="{{players}}" game="{{game}}"></map-view>
+    <encounter-view hidden="{{!isEncounterPhase(game.phase)}}" game="{{game}}"></encounter-view>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function() {
+      'use strict';
 
-    Polymer({
-      is: 'game-view',
+      Polymer({
+        is: 'game-view',
 
-      properties: {
-        players: {
-          type: Array
+        properties: {
+          players: {
+            type: Array
+          },
+          game: {
+            type: Object,
+            notify: true
+          }
         },
-        game: {
-          type: Object,
-          notify: true
+
+        currentPlayerName: function(currentPlayer) {
+          return this.players[currentPlayer].name;
+        },
+
+        currentPhaseName: function(phase) {
+          return this.$.constants.phaseNames[phase];
+        },
+
+        nextPhase: function() {
+          this.set('game.phase', this.game.phase + 1);
+        },
+
+        isMovementPhase: function(phase) {
+          return phase === this.$.constants.phases.Movement;
+        },
+
+        isEncounterPhase: function(phase) {
+          return phase === this.$.constants.phases.Encounter;
         }
-      },
-
-      currentPlayerName: function(turn) {
-        var playerIndex = turn % this.players.length;
-        return this.players[playerIndex].name;
-      },
-
-      currentPhaseName: function(phase) {
-        return this.game.phases[phase];
-      },
-
-      nextPhase: function() {
-        var nextPhase = this.game.phase + 1;
-        if (nextPhase === this.game.phases.length) {
-          nextPhase = 0;
-          this.set('game.turn', this.game.turn + 1);
-        }
-        this.set('game.phase', nextPhase);
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>

@@ -9,32 +9,48 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 -->
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../game-constants/game-constants.html">
 
 <dom-module id="game-data">
   <template>
+    <game-constants id="constants"></game-constants>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function() {
+      'use strict';
 
-    Polymer({
-      is: 'game-data',
+      Polymer({
+        is: 'game-data',
 
-      properties: {
-        game: {
-          type: Object,
-          notify: true,
-          value: {
-            turn: 1,
-            phase: 0,
-            phases: [
-              'Movement',
-              'Encounter'
-            ]
+        properties: {
+          game: {
+            type: Object,
+            notify: true,
+            value: {
+              turn: 1,
+              currentPlayer: 0,
+              phase: 0
+            }
+          },
+          players: {
+            type: Array,
+            readonly: true
+          }
+        },
+
+        observers: [
+          'phaseChange(game.phase)'
+        ],
+
+        phaseChange: function(phase) {
+          console.log('phase is now ' + phase);
+          if (phase === this.$.constants.phaseNames.length) {
+            this.set('game.phase', 0);
+            this.set('game.currentPlayer', (this.game.currentPlayer + 1) % this.players.length);
+            this.set('game.turn', this.game.turn + 1);
           }
         }
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>
