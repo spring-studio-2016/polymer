@@ -10,30 +10,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 
-<dom-module id="player-view">
-  <template>
-    The players are:
-    <ul>
-      <template is="dom-repeat" items="{{players}}">
-        <li>
-          {{item.name}} is in region {{item.region}}
-        </li>
-      </template>
-    </ul>
-  </template>
+<dom-module id="world-data">
   <script>
-    (function() {
-      'use strict';
+  (function() {
+    'use strict';
 
-      Polymer({
-        is: 'player-view',
+    Polymer({
+      is: 'world-data',
 
-        properties: {
-          players: {
-            type: Array,
-          }
+      properties: {
+        world: {
+          type: Object,
+          value: {
+            regions: [
+              {
+                name: 'Western Hemisphere',
+              },
+              {
+                name: 'Eastern Hemisphere'
+              }
+            ]
+          },
+          notify: true,
+          readOnly: true,
         }
-      });
-    })();
+      }
+    });
+  })();
   </script>
 </dom-module>

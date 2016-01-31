@@ -66,8 +66,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <player-data players="{{players}}"></player-data>
     <player-view players="[[players]]"></player-view>
 
+    <world-data world="{{world}}"></world-data>
     <game-data game="{{game}}" players="[[players]]"></game-data>
-    <game-view players="{{players}}" game="{{game}}"></game-view>
+    <game-view players="{{players}}" game="{{game}}" world="[[world]]"></game-view>
 
     <paper-toast id="toast">
       <span class="toast-hide-button" role="button" tabindex="0" onclick="app.$.toast.hide()">Ok</span>

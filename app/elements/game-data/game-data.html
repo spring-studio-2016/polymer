@@ -43,7 +43,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         ],
 
         phaseChange: function(phase) {
-          console.log('phase is now ' + phase);
           if (phase === this.$.constants.phaseNames.length) {
             this.set('game.phase', 0);
             this.set('game.currentPlayer', (this.game.currentPlayer + 1) % this.players.length);

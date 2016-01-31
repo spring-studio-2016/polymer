@@ -23,7 +23,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <br/> Current phase: {{currentPhaseName(game.phase)}}
     <br/>
 
-    <map-view hidden="{{!isMovementPhase(game.phase)}}" players="{{players}}" game="{{game}}"></map-view>
+    <map-view
+      hidden="{{!isMovementPhase(game.phase)}}"
+      players="{{players}}"
+      game="{{game}}"
+      regions="[[world.regions]]">
+    </map-view>
     <encounter-view hidden="{{!isEncounterPhase(game.phase)}}" game="{{game}}"></encounter-view>
   </template>
   <script>
@@ -40,7 +45,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           game: {
             type: Object,
             notify: true
-          }
+          },
+          world: Object
         },
 
         currentPlayerName: function(currentPlayer) {

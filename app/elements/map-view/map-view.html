@@ -13,9 +13,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <dom-module id="map-view">
   <template>
-    Where do you move to?
-    <paper-button raised on-tap="tap" region="0">Region containing [[regionContents(players.*, 0)]]</paper-button>
-    <paper-button raised on-tap="tap" region="1">Region containing [[regionContents(players.*, 1)]]</paper-button>
+    <style>
+    .map {
+      border: 1px solid black;
+    }
+    </style>
+    <div class="map">
+      <ul>
+        <template is="dom-repeat" items="{{players}}" index-as="index">
+          <li>
+            [[playerLocation(players.*, index)]]
+          </li>
+        </template>
+      </ul>
+
+      Where do you move to?
+      <template is="dom-repeat" items="{{regions}}" index-as="index">
+        <paper-button raised on-tap="tap" region$="{{index}}">
+          [[regionLabel(players.*,index)]]
+        </paper-button>
+      </template>
+    </div>
   </template>
   <script>
     (function() {
@@ -31,27 +49,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
           },
           game: {
             type: Object
-          }
+          },
+          regions: Array
         },
 
-        regionContents: function(change, number) {
-          var contents = [];
-          for (var i = 0; i < change.base.length; i++) {
-            var player = change.base[i];
-            if (player.region === number) {
-              contents.push(player.name);
-            }
-          }
-          if (contents.length > 0) {
-            return contents;
+        playerLocation: function(change, index) {
+          var player = this.players[index];
+          return player.name + ' is in ' + this.regions[player.region].name;
+        },
+
+        regionLabel: function(change, number) {
+          if (this.players[this.game.currentPlayer].region === number) {
+            return 'Stay in ' + this.regions[number].name;
           } else {
-            return 'Nobody';
+            return 'Move to ' + this.regions[number].name;
           }
         },
 
         tap: function(event) {
           var region = event.target.getAttribute('region');
-          this.set('players.' + this.game.currentPlayer + '.region', Number(region));
+          this.set('players.' + this.game.currentPlayer + '.region',
+            Number(region));
           this.set('game.phase', this.game.phase + 1);
         }
       });
