@@ -8,9 +8,9 @@ Code distributed by Google as part of the polymer project is also
 subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
 
-<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel='import' href='../../bower_components/polymer/polymer.html'>
 
-<dom-module id="world-data">
+<dom-module id='world-data'>
   <script>
   (function() {
     'use strict';
@@ -25,9 +25,83 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             regions: [
               {
                 name: 'Western Hemisphere',
+                encounters: [
+                  {
+                    name: 'Haughty Vampire',
+                    reactions: [
+                      {
+                        name: 'Talk',
+                        intro: 'You attend a gala and meet a pale stranger.',
+                        triggers: [
+                          {
+                            type: 'skill',
+                            skill: 'Beauty',
+                            conclusion: 'He is smitten by your good looks.'
+                          },
+                          {
+                            type: 'default',
+                            conclusion: 'He tells you that your blood is delicious.'
+                          }
+                        ]
+                      },
+                      {
+                        name: 'Ignore',
+                        intro: 'You see something mysterious and avoid it. You are the worst.',
+                        triggers: [
+                          {
+                            type: 'skill',
+                            skill: 'Luck',
+                            conclusion: 'At least you found a penny on the ground'
+                          },
+                          {
+                            type: 'default',
+                            conclusion: 'Nothing good can come of this.'
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
               },
               {
-                name: 'Eastern Hemisphere'
+                name: 'Eastern Hemisphere',
+                encounters: [
+                  {
+                    name: 'Forest Spirit',
+                    reactions: [
+                      {
+                        name: 'Fight',
+                        intro: 'Something in the forest seems wrong, so you cut it down. Jerk.',
+                        triggers: [
+                          {
+                            type: 'skill',
+                            skill: 'Weapon Use',
+                            conclusion: 'You kick the forest\'s arboreal ass.'
+                          },
+                          {
+                            type: 'default',
+                            conclusion: 'The desert is peaceful at least.'
+                          }
+                        ]
+                      },
+                      {
+                        name: 'Follow',
+                        intro: 'Something in the forest seems strange, so you follow your hunch.',
+                        triggers: [
+                          {
+                            type: 'skill',
+                            skill: 'Intuition',
+                            conclusion: 'You find a kensuke, a kitsuke, a omamori, and an otaku.'
+                          },
+                          {
+                            type: 'default',
+                            conclusion: 'You get lost in the woods.'
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
               }
             ]
           },

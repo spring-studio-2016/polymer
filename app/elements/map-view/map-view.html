@@ -67,10 +67,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         tap: function(event) {
-          var region = event.target.getAttribute('region');
-          this.set('players.' + this.game.currentPlayer + '.region',
-            Number(region));
+          var region = Number(event.target.getAttribute('region'));
+          this.set('players.' + this.game.currentPlayer + '.region', region);
           this.set('game.phase', this.game.phase + 1);
+          this.fire('selected', region);
         }
       });
     })();

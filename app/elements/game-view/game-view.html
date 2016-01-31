@@ -10,13 +10,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 <link rel="import" href="../../bower_components/polymer/polymer.html">
 <link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../game-constants/game-constants.html">
+<link rel="import" href="../../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/scale-up-animation.html">
+<link rel="import" href="../../bower_components/neon-animation/animations/fade-out-animation.html">
 <link rel="import" href="../map-view/map-view.html">
 <link rel="import" href="../encounter-view/encounter-view.html">
 
 <dom-module id="game-view">
   <template>
-    <game-constants id="constants"></game-constants>
+    <style>
+    #dialog {
+      padding: 32px;
+    }
+    </style>
 
     Turn: {{game.turn}}
     <br/> Current player: {{currentPlayerName(game.currentPlayer)}}
@@ -27,9 +33,18 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       hidden="{{!isMovementPhase(game.phase)}}"
       players="{{players}}"
       game="{{game}}"
-      regions="[[world.regions]]">
+      regions="[[world.regions]]"
+      on-selected="onRegionSelected">
     </map-view>
-    <encounter-view hidden="{{!isEncounterPhase(game.phase)}}" game="{{game}}"></encounter-view>
+
+    <paper-dialog
+        id="dialog"
+        modal
+        opened="{{!isMovementPhase(game.phase)}}"
+        entry-animation="scale-up-animation"
+        exit-animation="fade-out-animation" >
+      <encounter-view id="encounter" game="{{game}}" on-finish="onEncounterFinish"></encounter-view>
+    </paper-dialog>
   </template>
   <script>
     (function() {
@@ -54,7 +69,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         currentPhaseName: function(phase) {
-          return this.$.constants.phaseNames[phase];
+          return app.PHASE_NAMES[phase];
         },
 
         nextPhase: function() {
@@ -62,11 +77,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         },
 
         isMovementPhase: function(phase) {
-          return phase === this.$.constants.phases.Movement;
+          return phase === app.PHASES.movement;
         },
 
-        isEncounterPhase: function(phase) {
-          return phase === this.$.constants.phases.Encounter;
+        onRegionSelected: function(arg) {
+          var selection = arg.detail;
+          var encounter = this.world.regions[selection].encounters[0];
+          this.$.encounter.encounter = encounter;
+        },
+
+        onEncounterFinish: function() {
+          this.set('game.turn', this.game.turn + 1);
+          this.set('game.currentPlayer', (this.game.currentPlayer + 1) % this.players.length);
+          this.set('game.phase', app.PHASES.movement);
         }
       });
     })();

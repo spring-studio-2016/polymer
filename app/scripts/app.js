@@ -17,7 +17,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
   // Sets app default base URL
   app.baseUrl = '/polymer/';
-  if (window.location.port === '') {  // if production
+  if (window.location.port === '') { // if production
     // Uncomment app.baseURL below and
     // set app.baseURL to '/your-pathname/' if running from folder in production
     // app.baseUrl = '/polymer-starter-kit/';
@@ -40,5 +40,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
   window.addEventListener('WebComponentsReady', function() {
     // imports are loaded and elements have been registered
   });
+
+  app.PHASES = Object.freeze({
+    movement: 0,
+    encounter: 1,
+    story: 2,
+    conclusion: 3
+  });
+
+  app.PHASE_NAMES = [
+    'Movement',
+    'Encounter',
+    'Story',
+    'Conclusion'
+  ];
 
 })(document);
