@@ -16,21 +16,26 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <dom-module id="encounter-view">
   <template>
     <style>
-    #chosenReaction {
-      font-weight: bold;
-    }
-    #intro {
-      display: none
-    }
-    #conclusion {
-      display: none
-    }
+      #intro {
+        display: none;
+      }
+
+      #conclusion {
+        display: none;
+      }
+
+      .chosen {
+        font-weight: bold;
+        color: var(--primary-text-color);
+        background-color: var(--primary-background-color);
+      }
     </style>
 
     Encountering a [[encounter.name]]
     <br/>
     <template is="dom-repeat" items="[[encounter.reactions]]" index-as="index">
-      <paper-button raised on-tap="onTap" index$="{{index}}" hidden="[[!isEncounterPhase(game.phase)]]">
+      <paper-button raised="[[isEncounterPhase(game.phase)]]" on-tap="onTapReaction" index$="{{index}}"
+      disabled="[[!isEncounterPhase(game.phase)]]">
         [[reaction(encounter.reactions, index)]]
       </paper-button>
     </template>
@@ -44,7 +49,8 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       </p>
       <br/>
       <template is="dom-repeat" items="[[chosenReaction.triggers]]" index-as="index">
-        <paper-button raised on-tap="onTapTrigger" index$="{{index}}" hidden="[[!isStoryPhase(game.phase)]]">
+        <paper-button raised="[[isStoryPhase(game.phase)]]" disabled="[[!isStoryPhase(game.phase)]]"
+        on-tap="onTapTrigger" index$="{{index}}">
           [[triggerName(chosenReaction.triggers,index)]]
         </paper-button>
       </template>
@@ -58,95 +64,95 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     </div>
   </template>
   <script>
-  (function() {
-    'use strict';
+    (function() {
+      'use strict';
 
-    Polymer({
-      is: 'encounter-view',
-      behaviors: [ Polymer.NeonAnimationRunnerBehavior ],
-      properties: {
-        game: {
-          type: Object,
-          notify: true
-        },
-        encounter: Object,
-        chosenReaction: Object,
-        intro: String,
-        conclusion: String,
-        animationConfig: {
-          value: function() {
-            return {
-              'showIntro': {
-                name: 'fade-in-animation',
-                node: this.$.intro
-              },
-              'showConclusion': {
-                name: 'fade-in-animation',
-                node: this.$.conclusion
-              }
+      Polymer({
+        is: 'encounter-view',
+        behaviors: [Polymer.NeonAnimationRunnerBehavior],
+        properties: {
+          game: {
+            type: Object,
+            notify: true
+          },
+          encounter: Object,
+          chosenReaction: Object,
+          intro: String,
+          conclusion: String,
+          animationConfig: {
+            value: function() {
+              return {
+                'showIntro': {
+                  name: 'fade-in-animation',
+                  node: this.$.intro
+                },
+                'showConclusion': {
+                  name: 'fade-in-animation',
+                  node: this.$.conclusion
+                }
+              };
             }
           }
+        },
+
+        reaction: function(reactions, index) {
+          return reactions[index].name;
+        },
+
+        onTapReaction: function(event) {
+          event.target.className += ' chosen';
+
+          var selected = event.target.getAttribute('index');
+          this.chosenReaction = this.encounter.reactions[selected];
+          this.intro = this.chosenReaction.intro;
+          this.set('game.phase', app.PHASES.story);
+
+          this.$.intro.style.display = 'block';
+          this.playAnimation('showIntro');
+        },
+
+        isEncounterPhase: function(phase) {
+          return phase === app.PHASES.encounter;
+        },
+
+        isStoryPhase: function(phase) {
+          return phase === app.PHASES.story;
+        },
+
+        triggerName: function(triggers, index) {
+          var trigger = triggers[index];
+          if (trigger.type === 'skill') {
+            return 'Use ' + trigger.skill + ' Skill';
+          } else {
+            return 'No skill';
+          }
+        },
+
+        onTapTrigger: function(event) {
+          event.target.className += ' chosen';
+
+          var triggerIndex = Number(event.target.getAttribute('index'));
+          var trigger = this.chosenReaction.triggers[triggerIndex];
+          this.conclusion = trigger.conclusion;
+          this.set('game.phase', app.PHASES.conclusion);
+
+          this.$.conclusion.style.display = 'block';
+          this.playAnimation('showConclusion');
+        },
+
+        onFinish: function() {
+          this.reset();
+          this.fire('finish');
+        },
+
+        reset: function() {
+          this.chosenReaction = null;
+          this.intro = null;
+          this.conclusion = null;
+          this.$.intro.style.display = 'none';
+          this.$.conclusion.style.display = 'none';
         }
-      },
-
-      reaction: function(reactions, index) {
-        return reactions[index].name;
-      },
-
-      onTap: function(event) {
-        var selected = event.target.getAttribute('index');
-        this.chosenReaction = this.encounter.reactions[selected];
-        this.intro = this.chosenReaction.intro;
-        this.set('game.phase', app.PHASES.story);
-
-        this.$.intro.style.display = 'block';
-        this.playAnimation('showIntro');
-      },
-
-      isEncounterPhase: function(phase) {
-        return phase === app.PHASES.encounter;
-      },
-
-      isStoryPhase: function(phase) {
-        return phase === app.PHASES.story;
-      },
-
-      isConclusionPhase: function(phase) {
-        return phase === app.PHASES.conclusion;
-      },
-
-      triggerName: function(triggers, index) {
-        var trigger = triggers[index];
-        if (trigger.type === 'skill') {
-          return 'Use ' + trigger.skill + ' Skill';
-        } else {
-          return 'No skill';
-        }
-      },
-
-      onTapTrigger: function(event) {
-        var triggerIndex = Number(event.target.getAttribute('index'));
-        var trigger = this.chosenReaction.triggers[triggerIndex];
-        this.conclusion = trigger.conclusion;
-        this.set('game.phase', app.PHASES.conclusion);
-
-        this.$.conclusion.style.display = 'block';
-        this.playAnimation('showConclusion');
-      },
-
-      onFinish: function() {
-        this.reset();
-        this.fire('finish');
-      },
-
-      reset: function() {
-        this.chosenReaction = null;
-        this.intro = null;
-        this.conclusion = null;
-        this.$.intro.style.display = 'none';
-        this.$.conclusion.style.display = 'none';
-      }
-    });
-  })();
+      });
+    })();
   </script>
 </dom-module>
